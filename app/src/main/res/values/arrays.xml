@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- These are the options displayed in the gender drop-down Spinner -->
+    <string-array name="array_quantity_options">
+        <item>@string/quantity1</item>
+        <item>@string/quantity2</item>
+        <item>@string/quantity3</item>
+        <item>@string/quantity4</item>
+        <item>@string/quantity5</item>
+        <item>@string/quantity6</item>
+        <item>@string/quantity7</item>
+        <item>@string/quantity8</item>
+        <item>@string/quantity9</item>
+        <item>@string/quantity10</item>
+    </string-array>
+</resources>
