@@ -141,7 +141,13 @@ public class BookProvider extends ContentProvider {
             throw new IllegalArgumentException("Book requires valid quantity");
         }
 
-        // No need to check the breed, any value is valid (including null).
+        // Check that the supplier's name is not null
+        String supplierName = values.getAsString(BookEntry.COLUMN_BOOK_SUPPLIER_NAME);
+        if (supplierName == null) {
+            throw new IllegalArgumentException("Book requires a supplier's name");
+        }
+
+        // No need to check the supplier's phone, any value is valid (including null).
 
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
@@ -214,7 +220,16 @@ public class BookProvider extends ContentProvider {
             }
         }
 
-        // No need to check the breed, any value is valid (including null).
+        // If the {@link BookEntry#COLUMN_BOOK_SUPPLIER_NAME} key is present,
+        // check that the supplier's name value is not null.
+        if (values.containsKey(BookEntry.COLUMN_BOOK_SUPPLIER_NAME)) {
+            String supplierName = values.getAsString(BookEntry.COLUMN_BOOK_SUPPLIER_NAME);
+            if (supplierName == null) {
+                throw new IllegalArgumentException("Book requires a supplier's name");
+            }
+        }
+
+        // No need to check the supplier's phone, any value is valid (including null).
 
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
