@@ -102,7 +102,7 @@ public class CatalogActivity extends AppCompatActivity implements
         values.put(BookEntry.COLUMN_BOOK_NAME, "The Great Gatsby");
         values.put(BookEntry.COLUMN_BOOK_PRICE, 12);
         values.put(BookEntry.COLUMN_BOOK_QUANTITY, BookEntry.QUANTITY_1);
-        values.put(BookEntry.COLUMN_BOOK_SUPPLIER_NAME, "Barns");
+        values.put(BookEntry.COLUMN_BOOK_SUPPLIER_NAME, "Barns and Noble");
         values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, "0657435211");
 
         // Insert a new row for T.G.G in the database, returning the ID of that new row.

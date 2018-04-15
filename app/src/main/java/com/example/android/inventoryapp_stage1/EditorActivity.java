@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -124,6 +125,7 @@ public class EditorActivity extends AppCompatActivity implements
             getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
+
         // Find all relevant views that we will need to read user input from
         mNameEditText = findViewById(R.id.edit_book_name);
         mPriceEditText = findViewById(R.id.edit_book_price);
@@ -149,7 +151,7 @@ public class EditorActivity extends AppCompatActivity implements
     private void setupSpinner() {
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
-        ArrayAdapter quantitySpinnerAdapter = ArrayAdapter.createFromResource(this,
+        final ArrayAdapter quantitySpinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.array_quantity_options, android.R.layout.simple_spinner_item);
 
         // Specify dropdown layout style - simple list view with 1 item per line
@@ -194,6 +196,20 @@ public class EditorActivity extends AppCompatActivity implements
                 mQuantity = BookEntry.QUANTITY_1;
             }
         });
+    }
+
+    /**
+     * Decrease the quantity value in the spinner.
+     */
+    public void decreaseSpinnerItemPosition (View v) {
+        mQuantitySpinner.setSelection(Math.max(0, mQuantitySpinner.getSelectedItemPosition() - 1));
+    }
+
+    /**
+     * Increase the quantity value in the spinner.
+     */
+    public void increaseSpinnerItemPosition (View v) {
+        mQuantitySpinner.setSelection(Math.min(getResources().getStringArray(R.array.array_quantity_options).length - 1, mQuantitySpinner.getSelectedItemPosition() + 1));
     }
 
     /**
