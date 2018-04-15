@@ -230,6 +230,8 @@ public class EditorActivity extends AppCompatActivity implements
         if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) ||
                 TextUtils.isEmpty(supplierNameString) || TextUtils.isEmpty(supplierPhoneString)
                 && mQuantity == BookEntry.NULL_QUANTITY) {
+            Toast.makeText(this, getString(R.string.empty_fields),
+                    Toast.LENGTH_SHORT).show();
             // Since no fields were modified, we can return early without creating a new pet.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;

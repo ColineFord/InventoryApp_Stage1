@@ -118,4 +118,6 @@
     <string name="sale_button_failed">Book no longer in stock</string>
 
     <string name="null_quantity">0</string>
+
+    <string name="empty_fields">One or more fields are empty</string>
 </resources>
