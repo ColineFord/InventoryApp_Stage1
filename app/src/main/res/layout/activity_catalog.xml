@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/add_book_icon"/>
+            android:src="@drawable/book_icon"/>
 
         <TextView
             android:id="@+id/empty_title_text"
