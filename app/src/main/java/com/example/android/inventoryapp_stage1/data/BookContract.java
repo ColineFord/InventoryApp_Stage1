@@ -109,6 +109,7 @@ public final class BookContract {
         /**
          * Possible values for quantity of the book.
          */
+        public static final int NULL_QUANTITY = 0;
         public static final int QUANTITY_1 = 1;
         public static final int QUANTITY_2 = 2;
         public static final int QUANTITY_3 = 3;

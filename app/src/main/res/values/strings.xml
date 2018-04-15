@@ -109,10 +109,13 @@
     <string name="editor_delete_book_failed">Error with deleting book</string>
 
     <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
-    <string name="empty_view_title_text">It\'s a bit lonely here...</string>
+    <string name="empty_view_title_text">There are no books in the inventory...</string>
 
     <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
-    <string name="empty_view_subtitle_text">Get started by adding a book</string>
+    <string name="empty_view_subtitle_text">Get started by clicking the add book button at the bottom right
+    of the screen</string>
 
     <string name="sale_button_failed">Book no longer in stock</string>
+
+    <string name="null_quantity">0</string>
 </resources>

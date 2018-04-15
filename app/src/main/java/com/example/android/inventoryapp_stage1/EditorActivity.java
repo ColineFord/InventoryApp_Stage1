@@ -78,7 +78,7 @@ public class EditorActivity extends AppCompatActivity implements
      * {@link BookEntry#QUANTITY_7}, {@link BookEntry#QUANTITY_8}, {@link BookEntry#QUANTITY_9},or
      * {@link BookEntry#QUANTITY_10}.
      */
-    private int mQuantity = BookEntry.QUANTITY_1;
+    private int mQuantity = BookEntry.NULL_QUANTITY;
 
     /**
      * Boolean flag that keeps track of whether the book has been edited (true) or not (false)
@@ -166,7 +166,9 @@ public class EditorActivity extends AppCompatActivity implements
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
-                    if (selection.equals(getString(R.string.quantity2))) {
+                    if (selection.equals(getString(R.string.quantity1))) {
+                        mQuantity = BookEntry.QUANTITY_1;
+                    } else if (selection.equals(getString(R.string.quantity2))) {
                         mQuantity = BookEntry.QUANTITY_2;
                     } else if (selection.equals(getString(R.string.quantity3))) {
                         mQuantity = BookEntry.QUANTITY_3;
@@ -185,7 +187,7 @@ public class EditorActivity extends AppCompatActivity implements
                     } else if (selection.equals(getString(R.string.quantity10))) {
                         mQuantity = BookEntry.QUANTITY_10;
                     } else {
-                        mQuantity = BookEntry.QUANTITY_1;
+                        mQuantity = BookEntry.NULL_QUANTITY;
                     }
                 }
             }
@@ -193,7 +195,7 @@ public class EditorActivity extends AppCompatActivity implements
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mQuantity = BookEntry.QUANTITY_1;
+                mQuantity = BookEntry.NULL_QUANTITY;
             }
         });
     }
@@ -201,14 +203,14 @@ public class EditorActivity extends AppCompatActivity implements
     /**
      * Decrease the quantity value in the spinner.
      */
-    public void decreaseSpinnerItemPosition (View v) {
+    public void decreaseSpinnerItemPosition(View v) {
         mQuantitySpinner.setSelection(Math.max(0, mQuantitySpinner.getSelectedItemPosition() - 1));
     }
 
     /**
      * Increase the quantity value in the spinner.
      */
-    public void increaseSpinnerItemPosition (View v) {
+    public void increaseSpinnerItemPosition(View v) {
         mQuantitySpinner.setSelection(Math.min(getResources().getStringArray(R.array.array_quantity_options).length - 1, mQuantitySpinner.getSelectedItemPosition() + 1));
     }
 
@@ -225,10 +227,9 @@ public class EditorActivity extends AppCompatActivity implements
 
         // Check if this is supposed to be a new pet
         // and check if all the fields in the editor are blank
-        if (mCurrentBookUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) &&
-                TextUtils.isEmpty(supplierNameString) && TextUtils.isEmpty(supplierPhoneString)
-                && mQuantity == BookEntry.QUANTITY_1) {
+        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) ||
+                TextUtils.isEmpty(supplierNameString) || TextUtils.isEmpty(supplierPhoneString)
+                && mQuantity == BookEntry.NULL_QUANTITY) {
             // Since no fields were modified, we can return early without creating a new pet.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
@@ -427,32 +428,35 @@ public class EditorActivity extends AppCompatActivity implements
             // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
             // Then call setSelection() so that option is displayed on screen as the current selection.
             switch (quantity) {
-                case BookEntry.QUANTITY_2:
+                case BookEntry.QUANTITY_1:
                     mQuantitySpinner.setSelection(1);
                     break;
-                case BookEntry.QUANTITY_3:
+                case BookEntry.QUANTITY_2:
                     mQuantitySpinner.setSelection(2);
                     break;
-                case BookEntry.QUANTITY_4:
+                case BookEntry.QUANTITY_3:
                     mQuantitySpinner.setSelection(3);
                     break;
-                case BookEntry.QUANTITY_5:
+                case BookEntry.QUANTITY_4:
                     mQuantitySpinner.setSelection(4);
                     break;
-                case BookEntry.QUANTITY_6:
+                case BookEntry.QUANTITY_5:
                     mQuantitySpinner.setSelection(5);
                     break;
-                case BookEntry.QUANTITY_7:
+                case BookEntry.QUANTITY_6:
                     mQuantitySpinner.setSelection(6);
                     break;
-                case BookEntry.QUANTITY_8:
+                case BookEntry.QUANTITY_7:
                     mQuantitySpinner.setSelection(7);
                     break;
-                case BookEntry.QUANTITY_9:
+                case BookEntry.QUANTITY_8:
                     mQuantitySpinner.setSelection(8);
                     break;
-                case BookEntry.QUANTITY_10:
+                case BookEntry.QUANTITY_9:
                     mQuantitySpinner.setSelection(9);
+                    break;
+                case BookEntry.QUANTITY_10:
+                    mQuantitySpinner.setSelection(10);
                     break;
                 default:
                     mQuantitySpinner.setSelection(0);
@@ -468,7 +472,7 @@ public class EditorActivity extends AppCompatActivity implements
         mPriceEditText.setText("");
         mSupplierNameEditText.setText("");
         mSupplierPhoneEditText.setText("");
-        mQuantitySpinner.setSelection(0); // Select quantity = 1
+        mQuantitySpinner.setSelection(0); // Select quantity = 0
     }
 
     /**
