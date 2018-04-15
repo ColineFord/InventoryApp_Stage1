@@ -120,4 +120,5 @@
     <string name="null_quantity">0</string>
 
     <string name="empty_fields">One or more fields are empty</string>
+    <string name="no_activity_found">Cannot find a phone activity</string>
 </resources>

@@ -4,6 +4,7 @@ package com.example.android.inventoryapp_stage1;
  * Created by Coline on 11/04/2018.
  */
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -11,9 +12,11 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -40,6 +43,11 @@ public class EditorActivity extends AppCompatActivity implements
      * Identifier for the pet data loader
      */
     private static final int EXISTING_BOOK_LOADER = 0;
+
+    /**
+     * Button to call the supplier
+     */
+    private Button callSupplier;
 
     /**
      * Content URI for the existing pet (null if it's a new pet)
@@ -124,7 +132,6 @@ public class EditorActivity extends AppCompatActivity implements
             // and display the current values in the editor
             getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
-
 
         // Find all relevant views that we will need to read user input from
         mNameEditText = findViewById(R.id.edit_book_name);
@@ -420,13 +427,13 @@ public class EditorActivity extends AppCompatActivity implements
             int price = cursor.getInt(priceColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             String supplierName = cursor.getString(supplierNameColumnIndex);
-            String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
+            final int supplierPhone = cursor.getInt(supplierPhoneColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mPriceEditText.setText(Integer.toString(price));
             mSupplierNameEditText.setText(supplierName);
-            mSupplierPhoneEditText.setText(supplierPhone);
+            mSupplierPhoneEditText.setText(Integer.toString(supplierPhone));
 
             // Gender is a dropdown spinner, so map the constant value from the database
             // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
@@ -466,6 +473,16 @@ public class EditorActivity extends AppCompatActivity implements
                     mQuantitySpinner.setSelection(0);
                     break;
             }
+
+            callSupplier = findViewById(R.id.callSupplier);
+            callSupplier.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String phone = String.valueOf(supplierPhone);
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("supplierPhone", phone, null));
+                    startActivity(intent);
+                }
+            });
         }
     }
 

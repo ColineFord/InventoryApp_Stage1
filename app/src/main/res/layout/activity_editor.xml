@@ -133,4 +133,10 @@
             android:textSize="20dp"
             android:onClick="increaseSpinnerItemPosition"/>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/callSupplier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Call Supplier"/>
 </LinearLayout>
