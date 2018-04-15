@@ -63,20 +63,18 @@ public class BookCursorAdapter extends CursorAdapter {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = view.findViewById(R.id.name);
         TextView priceTextView = view.findViewById(R.id.price);
-        TextView quantityTextView = view.findViewById(R.id.quantity);
+        final TextView quantityTextView = view.findViewById(R.id.quantity);
         Button saleButton = view.findViewById(R.id.sale_button);
 
         // Find the columns of book attributes that we're interested in
-        int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
         int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_NAME);
         int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_PRICE);
-        int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_QUANTITY);
+        final int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_BOOK_QUANTITY);
 
         // Read the book attributes from the Cursor for the current book
-        final int bookId = cursor.getInt(idColumnIndex);
         String bookName = cursor.getString(nameColumnIndex);
         String bookPrice = cursor.getString(priceColumnIndex);
-        final int bookQuantity = cursor.getInt(quantityColumnIndex);
+        int bookQuantity = cursor.getInt(quantityColumnIndex);
 
         // If the book price is empty string or null, then use some default text
         // that says "Unknown price", so the TextView isn't blank.
@@ -85,34 +83,28 @@ public class BookCursorAdapter extends CursorAdapter {
         }
 
         // Update the TextViews with the attributes for the current book
-        saleButton.setFocusable(false);
-        if (bookQuantity >= 0) {
-            saleButton.setOnClickListener(new View.OnClickListener() {
-                                              @Override
-                                              public void onClick(View view) {
-                                                  ContentValues values = new ContentValues();
-                                                  if (bookQuantity == 0) {
-                                                      values.put(BookEntry.COLUMN_BOOK_QUANTITY, bookQuantity);
-                                                  } else {
-                                                      values.put(BookEntry.COLUMN_BOOK_QUANTITY, bookQuantity - 1);
-                                                  }
-                                                  Uri uri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, bookId);
-                                                  context.getContentResolver().update(
-                                                          uri,
-                                                          values,
-                                                          BookEntry._ID + "=?",
-                                                          new String[]{String.valueOf(ContentUris.parseId(uri))});
-                                              }
-                                          }
-            );
-            nameTextView.setText(bookName);
-            priceTextView.setText(String.format("Quantity: %s", String.valueOf(bookPrice)));
-            quantityTextView.setText(Integer.toString(bookQuantity));
-        } else {
+        nameTextView.setText(bookName);
+        priceTextView.setText(String.format("Price: %s $", String.valueOf(bookPrice)));
+        quantityTextView.setText(Integer.toString(bookQuantity));
 
-            Toast.makeText(context, "Quantity is Zero", Toast.LENGTH_SHORT).show();
+        int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
+        int bookId = cursor.getInt(idColumnIndex);
+        final Uri currentBookUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, bookId);
 
-        }
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int bookQuantity = Integer.parseInt(quantityTextView.getText().toString());
+                if (bookQuantity > 0){
+                    quantityTextView.setText("" + (--bookQuantity));
+                    ContentValues values = new ContentValues();
+                    values.put(BookEntry.COLUMN_BOOK_QUANTITY, bookQuantity);
+                    context.getContentResolver().update(currentBookUri, values, null, null);
+                } else {
+                    Toast.makeText(context, (R.string.sale_button_failed), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 }
