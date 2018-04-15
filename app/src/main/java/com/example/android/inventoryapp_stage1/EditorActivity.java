@@ -261,6 +261,7 @@ public class EditorActivity extends AppCompatActivity implements
                 // Otherwise, the insertion was successful and we can display a toast.
                 Toast.makeText(this, getString(R.string.editor_insert_book_successful),
                         Toast.LENGTH_SHORT).show();
+                finish();
             }
         } else {
             // Otherwise this is an EXISTING pet, so update the pet with content URI: mCurrentPetUri
@@ -278,6 +279,7 @@ public class EditorActivity extends AppCompatActivity implements
                 // Otherwise, the update was successful and we can display a toast.
                 Toast.makeText(this, getString(R.string.editor_update_book_successful),
                         Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }
