@@ -37,7 +37,7 @@ public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
-     * Identifier for the pet data loader
+     * Identifier for the book data loader
      */
     private static final int EXISTING_BOOK_LOADER = 0;
 
@@ -47,7 +47,7 @@ public class EditorActivity extends AppCompatActivity implements
     private Button callSupplier;
 
     /**
-     * Content URI for the existing pet (null if it's a new pet)
+     * Content URI for the existing pet (null if it's a new book)
      */
     private Uri mCurrentBookUri;
 
