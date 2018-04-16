@@ -147,8 +147,6 @@ public class CatalogActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-
-
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         // Define a projection that specifies the columns from the table we care about.

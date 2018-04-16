@@ -3,6 +3,7 @@ package com.example.android.inventoryapp_stage1;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -103,6 +104,15 @@ public class BookCursorAdapter extends CursorAdapter {
                 } else {
                     Toast.makeText(context, (R.string.sale_button_failed), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context,EditorActivity.class);
+                i.setData(currentBookUri);
+                context.startActivity(i);
             }
         });
 

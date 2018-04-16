@@ -4,6 +4,7 @@ package com.example.android.inventoryapp_stage1;
  * Created by Coline on 11/04/2018.
  */
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -11,9 +12,11 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -130,6 +133,14 @@ public class EditorActivity extends AppCompatActivity implements
             getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
+        callSupplier = findViewById(R.id.callSupplier);
+        callSupplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCall();
+            }
+        });
+
         // Find all relevant views that we will need to read user input from
         mNameEditText = findViewById(R.id.edit_book_name);
         mPriceEditText = findViewById(R.id.edit_book_price);
@@ -216,6 +227,28 @@ public class EditorActivity extends AppCompatActivity implements
      */
     public void increaseSpinnerItemPosition(View v) {
         mQuantitySpinner.setSelection(Math.min(getResources().getStringArray(R.array.array_quantity_options).length - 1, mQuantitySpinner.getSelectedItemPosition() + 1));
+    }
+
+    private void onCall() {
+        Intent callIntent = new Intent(Intent.ACTION_CALL); //use ACTION_CALL class
+        String phone = String.valueOf(mSupplierPhoneEditText);
+        callIntent.setData(Uri.fromParts(mCurrentBookUri.toString(), phone, null ));    //this is the phone number calling
+        //check permission
+        //If the device is running Android 6.0 (API level 23) and the app's targetSdkVersion is 23 or higher,
+        //the system asks the user to grant approval.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            //request permission from user if the app hasn't got the required permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CALL_PHONE},   //request specific permission from user
+                    10);
+            return;
+        } else {     //have got permission
+            try {
+                startActivity(callIntent);  //call activity and make phone call
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_activity_found), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
@@ -424,13 +457,13 @@ public class EditorActivity extends AppCompatActivity implements
             int price = cursor.getInt(priceColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             String supplierName = cursor.getString(supplierNameColumnIndex);
-            final int supplierPhone = cursor.getInt(supplierPhoneColumnIndex);
+            final String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mPriceEditText.setText(Integer.toString(price));
             mSupplierNameEditText.setText(supplierName);
-            mSupplierPhoneEditText.setText(Integer.toString(supplierPhone));
+            mSupplierPhoneEditText.setText(supplierPhone);
 
             // Gender is a dropdown spinner, so map the constant value from the database
             // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
@@ -470,16 +503,6 @@ public class EditorActivity extends AppCompatActivity implements
                     mQuantitySpinner.setSelection(0);
                     break;
             }
-
-            callSupplier = findViewById(R.id.callSupplier);
-            callSupplier.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String phone = String.valueOf(supplierPhone);
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("supplierPhone", phone, null));
-                    startActivity(intent);
-                }
-            });
         }
     }
 
