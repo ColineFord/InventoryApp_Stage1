@@ -7,6 +7,7 @@ package com.example.android.inventoryapp_stage1;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -18,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -29,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventoryapp_stage1.data.BookContract.BookEntry;
@@ -49,10 +52,14 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private Button callSupplier;
 
-    /** Button to increment the quantity */
+    /**
+     * Button to increment the quantity
+     */
     private Button increment;
 
-    /** Button to decrement the quantity */
+    /**
+     * Button to decrement the quantity
+     */
     private Button decrement;
 
     /**
@@ -84,6 +91,8 @@ public class EditorActivity extends AppCompatActivity implements
      * EditText field to enter the book's supplier phone number
      */
     private EditText mSupplierPhoneEditText;
+
+    private MenuItemCompat saveMenuOption;
 
     /**
      * Quantity of books. The possible valid values are in the BookContract.java file:
@@ -240,20 +249,6 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     /**
-     * Decrease the quantity value in the spinner.
-     */
-    public void decreaseSpinnerItemPosition(View v) {
-        mQuantitySpinner.setSelection(Math.max(0, mQuantitySpinner.getSelectedItemPosition() - 1));
-    }
-
-    /**
-     * Increase the quantity value in the spinner.
-     */
-    public void increaseSpinnerItemPosition(View v) {
-        mQuantitySpinner.setSelection(Math.min(getResources().getStringArray(R.array.array_quantity_options).length - 1, mQuantitySpinner.getSelectedItemPosition() + 1));
-    }
-
-    /**
      * Get user input from editor and save new book into database.
      */
     private void saveBook() {
@@ -266,12 +261,14 @@ public class EditorActivity extends AppCompatActivity implements
 
         // Check if this is supposed to be a new pet
         // and check if all the fields in the editor are blank
-        if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) ||
-                TextUtils.isEmpty(supplierNameString) || TextUtils.isEmpty(supplierPhoneString)
-                || mQuantity == BookEntry.NULL_QUANTITY) {
-            Toast.makeText(this, getString(R.string.empty_fields),
+        if (mCurrentBookUri == null && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) &&
+                TextUtils.isEmpty(supplierNameString) && TextUtils.isEmpty(supplierPhoneString)
+                && mQuantity == BookEntry.NULL_QUANTITY) {
+            Toast.makeText(this, "No book added",
                     Toast.LENGTH_SHORT).show();
+            return;
         } else {
+
             // Create a ContentValues object where column names are the keys,
             // and book attributes from the editor are the values.
             ContentValues values = new ContentValues();
@@ -318,6 +315,38 @@ public class EditorActivity extends AppCompatActivity implements
                 }
             }
         }
+
+    }
+
+    private boolean validData() {
+        String bookName, bookPrice, supplierName, supplierPhone;
+        bookName = mNameEditText.getText().toString().trim();
+        bookPrice = mPriceEditText.getText().toString().trim();
+        supplierName = mSupplierNameEditText.getText().toString().trim();
+        supplierPhone = mSupplierPhoneEditText.getText().toString().trim();
+        boolean isValid = true;
+        if (bookName.equals("") || TextUtils.isEmpty(bookName)) {
+            mNameEditText.setError("Name required");
+            isValid = false;
+        }
+        if (bookPrice.equals("") || TextUtils.isEmpty(bookPrice)) {
+            mPriceEditText.setError("Price required");
+            isValid = false;
+        }
+        if (mQuantity == BookEntry.NULL_QUANTITY) {
+            ((TextView)mQuantitySpinner.getSelectedView()).setError("Valid quantity required");
+            isValid = false;
+        }
+        if (supplierName.equals("") || TextUtils.isEmpty(supplierName)) {
+            mSupplierNameEditText.setError("Supplier name required");
+            isValid = false;
+        }
+        if (supplierPhone.equals("") || TextUtils.isEmpty(supplierPhone)) {
+            mSupplierPhoneEditText.setError("Supplier phone number required");
+            isValid = false;
+        }
+        return isValid;
+
     }
 
     @Override
@@ -349,10 +378,15 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Save book to database
-                saveBook();
-                // Exit activity
-                finish();
+                if (validData()) {
+                    // Save book to database
+                    saveBook();
+                    // Exit activity
+                    finish();
+                } else {
+                    Toast.makeText(this, getString(R.string.empty_fields),
+                            Toast.LENGTH_SHORT).show();
+                }
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:

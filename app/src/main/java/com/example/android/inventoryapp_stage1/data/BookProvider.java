@@ -12,7 +12,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.android.inventoryapp_stage1.EditorActivity;
 import com.example.android.inventoryapp_stage1.data.BookContract.BookEntry;
 
 /**
@@ -141,19 +143,17 @@ public class BookProvider extends ContentProvider {
             throw new IllegalArgumentException("Book requires valid price");
         }
 
-        // Check that the quantity is valid
-        Integer quantity = values.getAsInteger(BookEntry.COLUMN_BOOK_QUANTITY);
-        if (quantity == null || !BookEntry.isValidQuantity(quantity)) {
-            throw new IllegalArgumentException("Book requires valid quantity");
-        }
-
         // Check that the supplier's name is not null
         String supplierName = values.getAsString(BookEntry.COLUMN_BOOK_SUPPLIER_NAME);
         if (supplierName == null) {
             throw new IllegalArgumentException("Book requires a supplier's name");
         }
 
-        // No need to check the supplier's phone, any value is valid (including null).
+        // Check that the supplier's name is not null
+        String supplierPhone = values.getAsString(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE);
+        if (supplierPhone == null) {
+            throw new IllegalArgumentException("Book requires a supplier's phone number");
+        }
 
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
@@ -229,7 +229,14 @@ public class BookProvider extends ContentProvider {
             }
         }
 
-        // No need to check the supplier's phone, any value is valid (including null).
+        // If the {@link BookEntry#COLUMN_BOOK_SUPPLIER_PHONE} key is present,
+        // check that the supplier's phone number value is not null.
+        if (values.containsKey(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE)) {
+            String supplierPhone = values.getAsString(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE);
+            if (supplierPhone == null) {
+                throw new IllegalArgumentException("Book requires a supplier's phone number");
+            }
+        }
 
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
