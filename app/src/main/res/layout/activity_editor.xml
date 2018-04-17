@@ -111,30 +111,74 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:orientation="horizontal">
 
-        <Button
-            android:layout_margin="12dp"
-            android:id="@+id/minus_button"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textSize="20dp"
-            android:background="@color/colorPrimary" />
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/category_modify_quantity"
+            tools:text="Modify Quantity" />
 
-        <Button
-            android:layout_margin="12dp"
-            android:id="@+id/plus_button"
-            android:layout_width="30dp"
+        <!-- Increment/Decrement buttons field -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="+"
-            android:textSize="20dp" />
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <!-- Decrement button -->
+            <Button
+                android:id="@+id/minus_button"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@color/colorPrimary"
+                android:text="-"
+                android:textSize="20sp" />
+
+            <!-- Increment button-->
+            <Button
+                android:id="@+id/plus_button"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@color/colorPrimary"
+                android:text="+"
+                android:textSize="20sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/callSupplier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/call_supplier_button"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/category_order_more"
+            tools:text="Order more" />
+
+        <!-- Order more field-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <!-- Call supplier button-->
+            <Button
+                android:id="@+id/callSupplier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/editorColorPrimary"
+                android:padding="@dimen/fab_margin"
+                android:text="@string/call_supplier_button"
+                tools:text="Call Supplier" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

@@ -114,6 +114,12 @@
     <!-- Label for supplier category in the editor -->
     <string name="category_supplier">Supplier</string>
 
+    <!-- Label for Modify Quantity category in the editor -->
+    <string name="category_modify_quantity">Modify quantity</string>
+
+    <!-- Label for Order More category in the editor -->
+    <string name="category_order_more">Modify quantity</string>
+
     <!-- Text hint for supplier name field in the editor -->
     <string name="hint_supplier_name">Supplier Name</string>
 

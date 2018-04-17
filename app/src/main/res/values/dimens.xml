@@ -8,6 +8,8 @@
     <dimen name="subtitle_padding">8dp</dimen>
 
     <dimen name="list_item_margin">12dp</dimen>
+
     <dimen name="sale_button_width">55dp</dimen>
+
     <dimen name="sale_button_height">30dp</dimen>
 </resources>
