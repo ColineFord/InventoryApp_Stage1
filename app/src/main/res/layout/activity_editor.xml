@@ -120,8 +120,7 @@
             android:layout_height="wrap_content"
             android:text="-"
             android:textSize="20dp"
-            android:background="@color/colorPrimary"
-            android:onClick="decreaseSpinnerItemPosition"/>
+            android:background="@color/colorPrimary" />
 
         <Button
             android:layout_margin="12dp"
@@ -130,8 +129,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:text="+"
-            android:textSize="20dp"
-            android:onClick="increaseSpinnerItemPosition"/>
+            android:textSize="20dp" />
     </LinearLayout>
 
     <Button

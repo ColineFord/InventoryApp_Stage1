@@ -49,6 +49,12 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private Button callSupplier;
 
+    /** Button to increment the quantity */
+    private Button increment;
+
+    /** Button to decrement the quantity */
+    private Button decrement;
+
     /**
      * Content URI for the existing pet (null if it's a new book)
      */
@@ -118,14 +124,14 @@ public class EditorActivity extends AppCompatActivity implements
         // If the intent DOES NOT contain a pet content URI, then we know that we are
         // creating a new pet.
         if (mCurrentBookUri == null) {
-            // This is a new pet, so change the app bar to say "Add a Pet"
+            // This is a new pet, so change the app bar to say "Add a Book"
             setTitle(getString(R.string.editor_activity_title_new_book));
 
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a pet that hasn't been created yet.)
             invalidateOptionsMenu();
         } else {
-            // Otherwise this is an existing pet, so change app bar to say "Edit Pet"
+            // Otherwise this is an existing pet, so change app bar to say "Edit Book"
             setTitle(getString(R.string.editor_activity_title_edit_book));
 
             // Initialize a loader to read the pet data from the database
@@ -141,6 +147,21 @@ public class EditorActivity extends AppCompatActivity implements
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:" + mSupplierPhoneEditText.getText().toString()));
                 startActivity(callIntent);
+            }
+        });
+
+        increment = findViewById(R.id.plus_button);
+        increment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mQuantitySpinner.setSelection(Math.min(10, mQuantitySpinner.getSelectedItemPosition() + 1));
+            }
+        });
+        decrement = findViewById(R.id.minus_button);
+        decrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mQuantitySpinner.setSelection(Math.max(0, mQuantitySpinner.getSelectedItemPosition() - 1));
             }
         });
 
@@ -232,28 +253,6 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantitySpinner.setSelection(Math.min(getResources().getStringArray(R.array.array_quantity_options).length - 1, mQuantitySpinner.getSelectedItemPosition() + 1));
     }
 
-    private void onCall() {
-        Intent callIntent = new Intent(Intent.ACTION_CALL); //use ACTION_CALL class
-        String phone = String.valueOf(mSupplierPhoneEditText.getText().toString());
-        callIntent.setData(Uri.fromParts(mCurrentBookUri.toString(), phone, null));    //this is the phone number calling
-        //check permission
-        //If the device is running Android 6.0 (API level 23) and the app's targetSdkVersion is 23 or higher,
-        //the system asks the user to grant approval.
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            //request permission from user if the app hasn't got the required permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CALL_PHONE},   //request specific permission from user
-                    10);
-            return;
-        } else {     //have got permission
-            try {
-                startActivity(callIntent);  //call activity and make phone call
-            } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_activity_found), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     /**
      * Get user input from editor and save new book into database.
      */
@@ -269,57 +268,54 @@ public class EditorActivity extends AppCompatActivity implements
         // and check if all the fields in the editor are blank
         if (TextUtils.isEmpty(nameString) || TextUtils.isEmpty(priceString) ||
                 TextUtils.isEmpty(supplierNameString) || TextUtils.isEmpty(supplierPhoneString)
-                && mQuantity == BookEntry.NULL_QUANTITY) {
+                || mQuantity == BookEntry.NULL_QUANTITY) {
             Toast.makeText(this, getString(R.string.empty_fields),
                     Toast.LENGTH_SHORT).show();
-            // Since no fields were modified, we can return early without creating a new pet.
-            // No need to create ContentValues and no need to do any ContentProvider operations.
-            return;
-        }
-
-        // Create a ContentValues object where column names are the keys,
-        // and book attributes from the editor are the values.
-        ContentValues values = new ContentValues();
-        values.put(BookEntry.COLUMN_BOOK_NAME, nameString);
-        values.put(BookEntry.COLUMN_BOOK_PRICE, priceString);
-        values.put(BookEntry.COLUMN_BOOK_QUANTITY, mQuantity);
-        values.put(BookEntry.COLUMN_BOOK_SUPPLIER_NAME, supplierNameString);
-        values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, supplierPhoneString);
-
-        // Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
-        if (mCurrentBookUri == null) {
-            // This is a NEW pet, so insert a new pet into the provider,
-            // returning the content URI for the new pet.
-            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
-
-            // Show a toast message depending on whether or not the insertion was successful.
-            if (newUri == null) {
-                // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_insert_book_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_insert_book_successful),
-                        Toast.LENGTH_SHORT).show();
-                finish();
-            }
         } else {
-            // Otherwise this is an EXISTING pet, so update the pet with content URI: mCurrentPetUri
-            // and pass in the new ContentValues. Pass in null for the selection and selection args
-            // because mCurrentPetUri will already identify the correct row in the database that
-            // we want to modify.
-            int rowsAffected = getContentResolver().update(mCurrentBookUri, values, null, null);
+            // Create a ContentValues object where column names are the keys,
+            // and book attributes from the editor are the values.
+            ContentValues values = new ContentValues();
+            values.put(BookEntry.COLUMN_BOOK_NAME, nameString);
+            values.put(BookEntry.COLUMN_BOOK_PRICE, priceString);
+            values.put(BookEntry.COLUMN_BOOK_QUANTITY, mQuantity);
+            values.put(BookEntry.COLUMN_BOOK_SUPPLIER_NAME, supplierNameString);
+            values.put(BookEntry.COLUMN_BOOK_SUPPLIER_PHONE, supplierPhoneString);
 
-            // Show a toast message depending on whether or not the update was successful.
-            if (rowsAffected == 0) {
-                // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, getString(R.string.editor_update_book_failed),
-                        Toast.LENGTH_SHORT).show();
+            // Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
+            if (mCurrentBookUri == null) {
+                // This is a NEW pet, so insert a new pet into the provider,
+                // returning the content URI for the new pet.
+                Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+
+                // Show a toast message depending on whether or not the insertion was successful.
+                if (newUri == null) {
+                    // If the new content URI is null, then there was an error with insertion.
+                    Toast.makeText(this, getString(R.string.editor_insert_book_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Otherwise, the insertion was successful and we can display a toast.
+                    Toast.makeText(this, getString(R.string.editor_insert_book_successful),
+                            Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             } else {
-                // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_update_book_successful),
-                        Toast.LENGTH_SHORT).show();
-                finish();
+                // Otherwise this is an EXISTING pet, so update the pet with content URI: mCurrentPetUri
+                // and pass in the new ContentValues. Pass in null for the selection and selection args
+                // because mCurrentPetUri will already identify the correct row in the database that
+                // we want to modify.
+                int rowsAffected = getContentResolver().update(mCurrentBookUri, values, null, null);
+
+                // Show a toast message depending on whether or not the update was successful.
+                if (rowsAffected == 0) {
+                    // If no rows were affected, then there was an error with the update.
+                    Toast.makeText(this, getString(R.string.editor_update_book_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Otherwise, the update was successful and we can display a toast.
+                    Toast.makeText(this, getString(R.string.editor_update_book_successful),
+                            Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         }
     }
