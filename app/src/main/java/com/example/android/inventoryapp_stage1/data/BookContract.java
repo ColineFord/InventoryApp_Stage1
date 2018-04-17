@@ -15,7 +15,8 @@ public final class BookContract {
 
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
-    private BookContract() {}
+    private BookContract() {
+    }
 
     /**
      * The "Content authority" is a name for the entire content provider, similar to the
@@ -33,8 +34,8 @@ public final class BookContract {
 
     /**
      * Possible path (appended to base content URI for possible URI's)
-     * For instance, content://com.example.android.pets/pets/ is a valid path for
-     * looking at pet data. content://com.example.android.pets/staff/ will fail,
+     * For instance, content://com.example.android.books/books/ is a valid path for
+     * looking at book data. content://com.example.android.books/staff/ will fail,
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
     public static final String PATH_BOOKS = "books";
@@ -45,7 +46,9 @@ public final class BookContract {
      */
     public static final class BookEntry implements BaseColumns {
 
-        /** The content URI to access the book data in the provider */
+        /**
+         * The content URI to access the book data in the provider
+         */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
 
         /**
@@ -61,47 +64,49 @@ public final class BookContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
 
 
-        /** Name of database table for books */
+        /**
+         * Name of database table for books
+         */
         public final static String TABLE_NAME = "books";
 
         /**
          * Unique ID number for the book (only for use in the database table).
-         *
+         * <p>
          * Type: INTEGER
          */
         public final static String _ID = BaseColumns._ID;
 
         /**
          * Name of the book.
-         *
+         * <p>
          * Type: TEXT
          */
-        public final static String COLUMN_BOOK_NAME ="name";
+        public final static String COLUMN_BOOK_NAME = "name";
 
         /**
          * Price of the book.
-         *
+         * <p>
          * Type: INTEGER
          */
         public final static String COLUMN_BOOK_PRICE = "price";
 
         /**
-         * Quantity of the book.
-         *
+         * Quantity in stock of the book.
+         * <p>
          * Type: INTEGER
          */
         public final static String COLUMN_BOOK_QUANTITY = "quantity";
 
         /**
          * Supplier name for the book.
-         *
+         * <p>
          * Type: TEXT
          */
         public final static String COLUMN_BOOK_SUPPLIER_NAME = "supplierName";
 
         /**
          * Supplier phone number for the book.
-         *
+         * <p>
          * Type: TEXT
          */
         public final static String COLUMN_BOOK_SUPPLIER_PHONE = "supplierPhone";

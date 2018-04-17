@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.example.android.inventoryapp_stage1.data.BookContract.BookEntry;
 
 /**
- * {@link BookCursorAdapter} is an adapter for a list or grid view
+ * {@link BookCursorAdapter} is an adapter for a list view
  * that uses a {@link Cursor} of book data as its data source. This adapter knows
  * how to create list items for each row of book data in the {@link Cursor}.
  */
@@ -96,7 +96,7 @@ public class BookCursorAdapter extends CursorAdapter {
             @Override
             public void onClick(View v) {
                 int bookQuantity = Integer.parseInt(quantityTextView.getText().toString());
-                if (bookQuantity > 0){
+                if (bookQuantity > 0) {
                     quantityTextView.setText("" + (--bookQuantity));
                     ContentValues values = new ContentValues();
                     values.put(BookEntry.COLUMN_BOOK_QUANTITY, bookQuantity);
@@ -110,7 +110,7 @@ public class BookCursorAdapter extends CursorAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context,EditorActivity.class);
+                Intent i = new Intent(context, EditorActivity.class);
                 i.setData(currentBookUri);
                 context.startActivity(i);
             }

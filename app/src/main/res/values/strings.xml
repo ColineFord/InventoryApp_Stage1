@@ -75,6 +75,9 @@
     <!-- Title for the activity to edit a book -->
     <string name="editor_activity_title_edit_book">Edit book</string>
 
+    <!-- Toast "No book added" -->
+    <string name="no_book_added">No book added</string>
+
 
 
     <!-- BOOK-CURSOR-ADAPTER.java -->
@@ -145,4 +148,10 @@
     <string name="action_delete">Delete</string>
 
     <string name="no_activity_found">Cannot find a phone activity</string>
+    <string name="error_name_required">Name required</string>
+    <string name="error_price_required">Price required</string>
+    <string name="error_quantity_required">Valid quantity required</string>
+    <string name="error_supplier_name_required">Supplier name required</string>
+    <string name="error_supplier_number_required">Supplier phone number required</string>
+
 </resources>
