@@ -78,6 +78,13 @@
     <!-- Toast "No book added" -->
     <string name="no_book_added">No book added</string>
 
+    <!-- Error indications to the user, showing him/her which field is blank -->
+    <string name="error_name_required">Name required</string>
+    <string name="error_price_required">Price required</string>
+    <string name="error_quantity_required">Valid quantity required</string>
+    <string name="error_supplier_name_required">Supplier name required</string>
+    <string name="error_supplier_number_required">Supplier phone number required</string>
+
 
 
     <!-- BOOK-CURSOR-ADAPTER.java -->
@@ -147,11 +154,7 @@
     <!-- Label for editor overflow menu option that deletes the current book -->
     <string name="action_delete">Delete</string>
 
+    <!-- Toast to inform user that the app couldn't find a phone activity to start the intent -->
     <string name="no_activity_found">Cannot find a phone activity</string>
-    <string name="error_name_required">Name required</string>
-    <string name="error_price_required">Price required</string>
-    <string name="error_quantity_required">Valid quantity required</string>
-    <string name="error_supplier_name_required">Supplier name required</string>
-    <string name="error_supplier_number_required">Supplier phone number required</string>
 
 </resources>
