@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="11dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="@dimen/list_item_margin"
             android:fontFamily="sans-serif-medium"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="#2B3D4D"
@@ -28,38 +28,40 @@
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="@dimen/list_item_margin"
             android:fontFamily="sans-serif"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="#AEB6BD"
-            tools:text="3" />
+            tools:text="Price: 3 $" />
 
     </LinearLayout>
 
     <!-- Layout for quantity and Sale button -->
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="right"
         android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center_vertical">
 
         <Button
+            android:layout_gravity="center_vertical"
             android:id="@+id/sale_button"
-            android:layout_width="55dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/sale_button_width"
+            android:layout_height="@dimen/sale_button_height"
             android:text="Sale"
             android:background="@color/editorColorPrimary"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="@dimen/list_item_margin" />
 
         <TextView
             android:id="@+id/quantity"
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:fontFamily="sans-serif"
-            android:textAppearance="?android:textAppearanceMedium"
+            android:textAppearance="?android:textAppearanceLarge"
             android:textColor="#AEB6BD"
             tools:text="4" />
 
