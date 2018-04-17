@@ -133,11 +133,14 @@ public class EditorActivity extends AppCompatActivity implements
             getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
+        // Setting up the Call Supplier button to open a phone app and phone the supplier
         callSupplier = findViewById(R.id.callSupplier);
         callSupplier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCall();
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:" + mSupplierPhoneEditText.getText().toString()));
+                startActivity(callIntent);
             }
         });
 
@@ -231,8 +234,8 @@ public class EditorActivity extends AppCompatActivity implements
 
     private void onCall() {
         Intent callIntent = new Intent(Intent.ACTION_CALL); //use ACTION_CALL class
-        String phone = String.valueOf(mSupplierPhoneEditText);
-        callIntent.setData(Uri.fromParts(mCurrentBookUri.toString(), phone, null ));    //this is the phone number calling
+        String phone = String.valueOf(mSupplierPhoneEditText.getText().toString());
+        callIntent.setData(Uri.fromParts(mCurrentBookUri.toString(), phone, null));    //this is the phone number calling
         //check permission
         //If the device is running Android 6.0 (API level 23) and the app's targetSdkVersion is 23 or higher,
         //the system asks the user to grant approval.
